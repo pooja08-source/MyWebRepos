@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
+  base: '/MyWebRepos/',
   plugins: [
     react(),
     VitePWA({
@@ -11,11 +12,10 @@ export default defineConfig({
         name: 'TravelBooking',
         short_name: 'TravelBooking',
         description: 'Travel Booking Application',
-        theme_color: '#ffffff',
-        background_color: '#ffffff',
+        start_url: '/MyWebRepos/',
         display: 'standalone',
-        start_url: '/',
-        icons: []
+        background_color: '#ffffff',
+        theme_color: '#ffffff'
       }
     })
   ]
