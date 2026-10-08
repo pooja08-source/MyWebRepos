@@ -13,7 +13,7 @@ export const packages = [
       "Breakfast",
       "Local transport",
     ],
-    dates: ["2026-09-10", "2026-09-18"],
+    dates: ["2026-10-10", "2026-10-18", "2026-10-28", "2026-11-08", "2026-11-22"],
   },
 
   {
@@ -30,7 +30,7 @@ export const packages = [
       "Breakfast & Dinner",
       "Sightseeing",
     ],
-    dates: ["2026-09-12", "2026-09-22"],
+    dates: ["2026-10-11", "2026-10-21", "2026-10-31", "2026-11-11", "2026-11-25"],
   },
 
   {
@@ -47,7 +47,7 @@ export const packages = [
       "Breakfast",
       "Adventure activities",
     ],
-    dates: ["2026-09-14", "2026-09-25"],
+    dates: ["2026-10-13", "2026-10-23", "2026-11-02", "2026-11-14", "2026-11-28"],
   },
 
   {
@@ -64,7 +64,7 @@ export const packages = [
       "Breakfast",
       "Adventure activities",
     ],
-    dates: ["2026-09-11", "2026-09-20"],
+    dates: ["2026-10-15", "2026-10-25", "2026-11-05", "2026-11-17", "2026-11-30"],
   },
 
   {
@@ -81,7 +81,7 @@ export const packages = [
       "Breakfast",
       "Sightseeing",
     ],
-    dates: ["2026-09-16", "2026-09-27"],
+    dates: ["2026-10-16", "2026-10-27", "2026-11-07", "2026-11-19", "2026-11-27"],
   },
 
   {
@@ -98,6 +98,6 @@ export const packages = [
       "Breakfast",
       "Coffee plantation tour",
     ],
-    dates: ["2026-09-13", "2026-09-23"],
+    dates: ["2026-10-19", "2026-10-29", "2026-11-04", "2026-11-16", "2026-11-29"],
   },
 ];

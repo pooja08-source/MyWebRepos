@@ -1,8 +1,13 @@
 import { useNavigate } from "react-router-dom";
+
 import { useBooking } from "../context/BookingContext";
+
+import Input from "./Input";
+
 import "./components.css";
 
 function BookingTravelers() {
+
   const navigate = useNavigate();
 
   const {
@@ -13,113 +18,175 @@ function BookingTravelers() {
   } = useBooking();
 
   const handleNext = () => {
+
     if (!traveler.name.trim()) {
-      alert("Please enter traveler name");
+
+      alert(
+        "Please enter traveler name."
+      );
+
+      return;
+    }
+
+    const namePattern =
+      /^[A-Za-z ]+$/;
+
+    if (!namePattern.test(
+      traveler.name.trim()
+    )) {
+
+      alert(
+        "Traveler name should contain only letters."
+      );
+
       return;
     }
 
     if (!traveler.email.trim()) {
-      alert("Please enter email");
+
+      alert(
+        "Please enter email."
+      );
+
       return;
     }
 
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailPattern =
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (!emailPattern.test(traveler.email)) {
-      alert("Please enter a valid email address");
+    if (!emailPattern.test(
+      traveler.email
+    )) {
+
+      alert(
+        "Please enter a valid email address."
+      );
+
       return;
     }
 
     if (!traveler.phone.trim()) {
-      alert("Please enter phone number");
+
+      alert(
+        "Please enter phone number."
+      );
+
       return;
     }
 
-    if (!/^[0-9]{10}$/.test(traveler.phone)) {
-      alert("Phone number must contain 10 digits");
+    if (!/^[0-9]{10}$/.test(
+      traveler.phone
+    )) {
+
+      alert(
+        "Phone number must contain 10 digits."
+      );
+
       return;
     }
 
-    if (travelers < 1) {
-      alert("Number of travelers must be at least 1");
+    if (
+      !Number.isInteger(travelers) ||
+      travelers < 1
+    ) {
+
+      alert(
+        "Number of travelers must be at least 1."
+      );
+
       return;
     }
 
-    navigate("/booking/summary");
+    navigate(
+      "/booking/summary"
+    );
   };
 
   return (
+
     <div className="booking-step">
-      <h2>Traveler Information 👤</h2>
 
-      <div className="traveler-step-form">
-        <label>Full Name</label>
+      <h2>
+        Traveler Information 👤
+      </h2>
 
-        <input
-          type="text"
-          placeholder="Enter full name"
-          value={traveler.name}
-          onChange={(e) =>
-            setTraveler({
-              ...traveler,
-              name: e.target.value,
-            })
-          }
-        />
+      <Input
+        label="Full Name"
+        name="name"
+        value={traveler.name}
+        placeholder="Enter full name"
+        onChange={(e) =>
+          setTraveler({
+            ...traveler,
+            name: e.target.value,
+          })
+        }
+      />
 
-        <label>Email</label>
+      <Input
+        label="Email"
+        type="email"
+        name="email"
+        value={traveler.email}
+        placeholder="Enter email"
+        onChange={(e) =>
+          setTraveler({
+            ...traveler,
+            email: e.target.value,
+          })
+        }
+      />
 
-        <input
-          type="email"
-          placeholder="Enter email"
-          value={traveler.email}
-          onChange={(e) =>
-            setTraveler({
-              ...traveler,
-              email: e.target.value,
-            })
-          }
-        />
+      <Input
+        label="Phone Number"
+        type="tel"
+        name="phone"
+        value={traveler.phone}
+        placeholder="Enter 10 digit phone number"
+        onChange={(e) =>
+          setTraveler({
+            ...traveler,
+            phone:
+              e.target.value.replace(
+                /\D/g,
+                ""
+              ),
+          })
+        }
+      />
 
-        <label>Phone Number</label>
-
-        <input
-          type="tel"
-          placeholder="Enter 10 digit phone number"
-          value={traveler.phone}
-          onChange={(e) =>
-            setTraveler({
-              ...traveler,
-              phone: e.target.value.replace(/\D/g, ""),
-            })
-          }
-        />
-
-        <label>Number of Travelers</label>
-
-        <input
-          type="number"
-          min="1"
-          value={travelers}
-          onChange={(e) =>
-            setTravelers(
-              Math.max(1, Number(e.target.value))
-            )
-          }
-        />
-      </div>
+      <Input
+        label="Number of Travelers"
+        type="number"
+        name="travelers"
+        value={travelers}
+        onChange={(e) =>
+          setTravelers(
+            Number(e.target.value)
+          )
+        }
+      />
 
       <div className="booking-step-actions">
+
         <button
-          onClick={() => navigate("/booking/dates")}
+          onClick={() =>
+            navigate(
+              "/booking/dates"
+            )
+          }
         >
           ← Back
         </button>
 
-        <button onClick={handleNext}>
+        <button
+          onClick={handleNext}
+        >
           Continue to Summary →
         </button>
+
       </div>
+
     </div>
   );
 }

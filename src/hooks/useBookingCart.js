@@ -1,9 +1,16 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState
+} from "react";
+
 import { useAuth } from "../context/AuthContext";
 
 function getAmount(price, travelers) {
 
-  const subtotal = price * travelers;
+  const subtotal =
+    price * travelers;
 
   const discount =
     travelers >= 4
@@ -31,35 +38,41 @@ function useBookingCart() {
 
   const { user } = useAuth();
 
-  // Separate data for every account
-  const accountKey = user?.email
-    ? `wanderly-data-${user.email.toLowerCase()}`
-    : null;
+  const accountKey =
+    user?.email
+      ? `wanderly-data-${user.email.toLowerCase()}`
+      : null;
 
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] =
+    useState([]);
 
-  const [confirmedBooking, setConfirmedBooking] =
+  const [confirmedBooking,
+    setConfirmedBooking] =
     useState(null);
 
-  const [selectedPackage, setSelectedPackage] =
+  const [selectedPackage,
+    setSelectedPackage] =
     useState(null);
 
-  const [travelDate, setTravelDate] =
+  const [travelDate,
+    setTravelDate] =
     useState("");
 
-  const [travelers, setTravelers] =
+  const [travelers,
+    setTravelers] =
     useState(1);
 
-  const [traveler, setTraveler] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    payment: "",
-  });
+  const [traveler,
+    setTraveler] =
+    useState({
+      name: "",
+      email: "",
+      phone: "",
+      payment: "",
+    });
 
-  // ==============================
-  // LOAD ACCOUNT DATA
-  // ==============================
+
+  /* LOAD ACCOUNT DATA */
 
   useEffect(() => {
 
@@ -82,19 +95,25 @@ function useBookingCart() {
     }
 
     const saved =
-      localStorage.getItem(accountKey);
+      localStorage.getItem(
+        accountKey
+      );
 
     if (saved) {
 
-      const data = JSON.parse(saved);
+      const data =
+        JSON.parse(saved);
 
-      setCart(data.cart || []);
+      setCart(
+        data.cart || []
+      );
 
       setConfirmedBooking(
         data.confirmedBooking || null
       );
 
-      setTraveler({
+      setTraveler(
+        data.traveler || {
           name: "",
           email: "",
           phone: "",
@@ -116,17 +135,19 @@ function useBookingCart() {
         phone: "",
         payment: "",
       });
+
     }
 
   }, [accountKey]);
 
-  // ==============================
-  // SAVE ACCOUNT DATA
-  // ==============================
+
+  /* SAVE ACCOUNT DATA */
 
   useEffect(() => {
 
-    if (!accountKey) return;
+    if (!accountKey) {
+      return;
+    }
 
     localStorage.setItem(
       accountKey,
@@ -144,99 +165,122 @@ function useBookingCart() {
     traveler,
   ]);
 
-  // ==============================
-  // COST
-  // ==============================
 
-  const costSummary = useMemo(() => {
+  /* COST */
 
-    if (!selectedPackage) {
+  const costSummary =
+    useMemo(() => {
 
-      return {
-        subtotal: 0,
-        discount: 0,
-        tax: 0,
-        total: 0,
-      };
-    }
+      if (!selectedPackage) {
 
-    return getAmount(
-      selectedPackage.price,
-      travelers
-    );
+        return {
+          subtotal: 0,
+          discount: 0,
+          tax: 0,
+          total: 0,
+        };
+      }
 
-  }, [selectedPackage, travelers]);
-
-  // ==============================
-  // CART TOTAL
-  // ==============================
-
-  const cartTotal = useMemo(() => {
-
-    return cart.reduce(
-      (sum, item) =>
-        sum + Number(item.total || 0),
-      0
-    );
-
-  }, [cart]);
-
-  // ==============================
-  // ADD TO CART
-  // ==============================
-
-  const addToCart = useCallback(() => {
-
-    if (!selectedPackage || !travelDate) {
-      return null;
-    }
-
-    const item = {
-
-      ...selectedPackage,
-
-      travelDate,
-
-      travelers,
-
-      ...costSummary,
-
-      cartId: Date.now(),
-    };
-
-    setCart((prev) => [
-      ...prev,
-      item,
-    ]);
-
-    return item;
-
-  }, [
-    selectedPackage,
-    travelDate,
-    travelers,
-    costSummary,
-  ]);
-
-  // ==============================
-  // REMOVE
-  // ==============================
-
-  const removeFromCart =
-    useCallback((cartId) => {
-
-      setCart((prev) =>
-        prev.filter(
-          (item) =>
-            item.cartId !== cartId
-        )
+      return getAmount(
+        selectedPackage.price,
+        travelers
       );
 
-    }, []);
+    }, [
+      selectedPackage,
+      travelers
+    ]);
 
-  // ==============================
-  // UPDATE DATE
-  // ==============================
+
+  /* CART TOTAL */
+
+  const cartTotal =
+    useMemo(() => {
+
+      return cart.reduce(
+        (sum, item) =>
+          sum +
+          Number(
+            item.total || 0
+          ),
+        0
+      );
+
+    }, [cart]);
+
+
+  /* ADD TO CART */
+
+  const addToCart =
+    useCallback(() => {
+
+      if (
+        !selectedPackage ||
+        !travelDate ||
+        travelers < 1
+      ) {
+        return null;
+      }
+
+      const item = {
+
+        ...selectedPackage,
+
+        travelDate,
+
+        travelers,
+
+        ...costSummary,
+
+        cartId: Date.now(),
+
+      };
+
+      setCart((prev) => [
+
+        ...prev.filter(
+          (oldItem) =>
+            !(
+              oldItem.id ===
+                selectedPackage.id &&
+              oldItem.travelDate ===
+                travelDate
+            )
+        ),
+
+        item,
+
+      ]);
+
+      return item;
+
+    }, [
+      selectedPackage,
+      travelDate,
+      travelers,
+      costSummary,
+    ]);
+
+
+  /* REMOVE */
+
+  const removeFromCart =
+    useCallback(
+      (cartId) => {
+
+        setCart((prev) =>
+          prev.filter(
+            (item) =>
+              item.cartId !== cartId
+          )
+        );
+
+      },
+      []
+    );
+
+
+  /* UPDATE DATE */
 
   const updateTravelDates =
     useCallback(
@@ -247,7 +291,8 @@ function useBookingCart() {
             item.cartId === cartId
               ? {
                   ...item,
-                  travelDate: newDate,
+                  travelDate:
+                    newDate,
                 }
               : item
           )
@@ -257,19 +302,22 @@ function useBookingCart() {
       []
     );
 
-  // ==============================
-  // UPDATE TRAVELERS
-  // ==============================
+
+  /* UPDATE TRAVELERS */
 
   const updateTravelers =
     useCallback(
-      (cartId, newTravelers) => {
+      (
+        cartId,
+        newTravelers
+      ) => {
 
         setCart((prev) =>
           prev.map((item) => {
 
             if (
-              item.cartId !== cartId
+              item.cartId !==
+              cartId
             ) {
               return item;
             }
@@ -282,8 +330,10 @@ function useBookingCart() {
 
             return {
               ...item,
+
               travelers:
                 newTravelers,
+
               ...amount,
             };
 
@@ -294,18 +344,18 @@ function useBookingCart() {
       []
     );
 
-  // ==============================
-  // CLEAR CART
-  // ==============================
+
+  /* CLEAR CART */
 
   const clearCart =
     useCallback(() => {
+
       setCart([]);
+
     }, []);
 
-  // ==============================
-  // CONFIRM BOOKING
-  // ==============================
+
+  /* CONFIRM BOOKING */
 
   const confirmBooking =
     useCallback(
@@ -316,15 +366,22 @@ function useBookingCart() {
         }
 
         setConfirmedBooking({
+
           traveler,
-          total: item.total,
+
+          total:
+            item.total,
+
           items: [item],
+
         });
 
         return true;
+
       },
       [traveler]
     );
+
 
   return {
 
@@ -359,6 +416,7 @@ function useBookingCart() {
     clearCart,
 
     confirmBooking,
+
   };
 }
 

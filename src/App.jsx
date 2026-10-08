@@ -19,6 +19,7 @@ import BookingDates from "./components/BookingDates";
 import BookingTravelers from "./components/BookingTravelers";
 import BookingSummary from "./components/BookingSummary";
 import BookingPayment from "./components/BookingPayment";
+
 import ForgetPassword from "./components/ForgetPassword";
 import Bookings from "./components/Bookings";
 
@@ -30,8 +31,12 @@ function App() {
 
       <Routes>
 
-        {/* Public Routes */}
-        <Route path="/" element={<Home />} />
+        {/* PUBLIC ROUTES */}
+
+        <Route
+          path="/"
+          element={<Home />}
+        />
 
         <Route
           path="/login"
@@ -42,12 +47,15 @@ function App() {
           path="/signup"
           element={<Signup />}
         />
+
         <Route
           path="/forgot-password"
           element={<ForgetPassword />}
         />
 
-        {/* Protected Routes */}
+
+        {/* PROTECTED PACKAGE ROUTES */}
+
         <Route
           path="/packages"
           element={
@@ -75,7 +83,9 @@ function App() {
           }
         />
 
-        {/* Nested Booking Routes */}
+
+        {/* PROTECTED BOOKING FLOW */}
+
         <Route
           path="/booking"
           element={
@@ -112,6 +122,21 @@ function App() {
 
         </Route>
 
+
+        {/* REQUIRED PROTECTED /PAYMENT ROUTE */}
+
+        <Route
+          path="/payment"
+          element={
+            <ProtectedRoute>
+              <BookingPayment />
+            </ProtectedRoute>
+          }
+        />
+
+
+        {/* PROTECTED CHECKOUT */}
+
         <Route
           path="/checkout"
           element={
@@ -120,6 +145,9 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+
+        {/* PROTECTED BOOKINGS */}
 
         <Route
           path="/bookings"
@@ -130,12 +158,16 @@ function App() {
           }
         />
 
+
+        {/* BOOKING CONFIRMATION */}
+
         <Route
           path="/confirmation"
           element={
             <ProtectedRoute>
               <div className="confirmation">
                 <h2>Booking Confirmed 🎉</h2>
+
                 <p>
                   Your trip has been successfully booked!
                 </p>

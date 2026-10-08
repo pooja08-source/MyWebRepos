@@ -1,8 +1,13 @@
 import { useNavigate } from "react-router-dom";
+
 import { useBooking } from "../context/BookingContext";
+
+import TravelerCard from "./TravelerCard";
+
 import "./components.css";
 
 function BookingSummary() {
+
   const navigate = useNavigate();
 
   const {
@@ -14,23 +19,40 @@ function BookingSummary() {
   } = useBooking();
 
   if (!selectedPackage) {
-    return (
-      <div className="booking-step">
-        <h2>No package selected</h2>
 
-        <button onClick={() => navigate("/packages")}>
+    return (
+
+      <div className="booking-step">
+
+        <h2>
+          No package selected
+        </h2>
+
+        <button
+          onClick={() =>
+            navigate("/packages")
+          }
+        >
           Explore Packages
         </button>
+
       </div>
     );
   }
 
   return (
+
     <div className="booking-step">
-      <h2>Booking Summary 🧳</h2>
+
+      <h2>
+        Booking Summary 🧳
+      </h2>
 
       <div className="summary-card">
-        <h3>Trip Details</h3>
+
+        <h3>
+          Trip Details
+        </h3>
 
         <p>
           <strong>Package:</strong>{" "}
@@ -59,55 +81,55 @@ function BookingSummary() {
 
         <hr />
 
-        <h3>Traveler Details</h3>
-
         <p>
-          <strong>Name:</strong>{" "}
-          {traveler.name}
+          Package Cost: ₹
+          {costSummary.subtotal}
         </p>
 
         <p>
-          <strong>Email:</strong>{" "}
-          {traveler.email}
+          Discount: ₹
+          {costSummary.discount}
         </p>
 
         <p>
-          <strong>Phone:</strong>{" "}
-          {traveler.phone}
-        </p>
-
-        <hr />
-
-        <p>
-          Package Cost: ₹{costSummary.subtotal}
-        </p>
-
-        <p>
-          Discount: ₹{costSummary.discount}
-        </p>
-
-        <p>
-          Tax: ₹{costSummary.tax}
+          Tax: ₹
+          {costSummary.tax}
         </p>
 
         <h3>
-          Final Amount: ₹{costSummary.total}
+          Final Amount: ₹
+          {costSummary.total}
         </h3>
+
       </div>
 
+      <TravelerCard
+        traveler={traveler}
+        travelers={travelers}
+      />
+
       <div className="booking-step-actions">
+
         <button
-          onClick={() => navigate("/booking/travelers")}
+          onClick={() =>
+            navigate(
+              "/booking/travelers"
+            )
+          }
         >
           ← Back
         </button>
 
         <button
-          onClick={() => navigate("/booking/payment")}
+          onClick={() =>
+            navigate("/payment")
+          }
         >
           Continue to Payment →
         </button>
+
       </div>
+
     </div>
   );
 }

@@ -1,34 +1,69 @@
 import { useNavigate } from "react-router-dom";
+
 import { useBooking } from "../context/BookingContext";
+
 import "./components.css";
 
 function BookingPayment() {
+
   const navigate = useNavigate();
 
   const {
-    addToCart,
-    confirmBooking,
+    cart,
     traveler,
     setTraveler,
+    confirmBooking,
   } = useBooking();
 
   const handlePayment = () => {
-    const item = addToCart();
 
-    if (!item) {
-      alert("Please select your travel date");
+    if (!traveler.payment) {
+
+      alert(
+        "Please select a payment method."
+      );
+
       return;
     }
 
-    confirmBooking(item);
+    if (!cart.length) {
 
-    navigate("/confirmation");
+      alert(
+        "Please add a package to the booking cart."
+      );
+
+      navigate("/packages");
+
+      return;
+    }
+
+    const lastItem =
+      cart[cart.length - 1];
+
+    const confirmed =
+      confirmBooking(lastItem);
+
+    if (!confirmed) {
+
+      alert(
+        "Unable to confirm booking."
+      );
+
+      return;
+    }
+
+    navigate(
+      "/confirmation"
+    );
   };
 
   return (
+
     <div className="booking-step">
 
-      <h2>Payment 💳</h2>
+      <h2>
+        Payment 💳
+      </h2>
 
       <p>
         Select your preferred payment method
@@ -46,10 +81,12 @@ function BookingPayment() {
           onChange={(e) =>
             setTraveler({
               ...traveler,
-              payment: e.target.value,
+              payment:
+                e.target.value,
             })
           }
         >
+
           <option value="">
             Select Payment Method
           </option>
@@ -69,6 +106,7 @@ function BookingPayment() {
           <option value="Net Banking">
             Net Banking
           </option>
+
         </select>
 
       </div>
@@ -77,7 +115,9 @@ function BookingPayment() {
 
         <button
           onClick={() =>
-            navigate("/booking/summary")
+            navigate(
+              "/booking/summary"
+            )
           }
         >
           ← Back
