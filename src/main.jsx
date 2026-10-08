@@ -11,7 +11,7 @@ ReactDOM.createRoot(
 ).render(
   <React.StrictMode>
 
-    <BrowserRouter>
+    <BrowserRouter basename="/MyWebRepos/">
 
       <AuthProvider>
 
